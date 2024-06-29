@@ -13,8 +13,6 @@ console.log(checkLength('проверяемая строка', 10));
 
 const isPalindrome = (testingString) => {
   // eslint-disable-next-line no-unused-vars
-  const revereAndLowerCase = (str) =>
-    str.split('').reverse().join('').toLowerCase();
   let checkString = '';
 
   for (const symbol of testingString) {
@@ -22,7 +20,7 @@ const isPalindrome = (testingString) => {
       checkString += symbol;
     }
   }
-  return checkString.revereAndLowerCase === testingString.revereAndLowerCase;
+  return checkString.split('').reverse().join('').toLowerCase() === checkString.toLowerCase();
 };
 // eslint-disable-next-line no-console
 console.log(isPalindrome('Лёша на полке клопа нашёл '));
