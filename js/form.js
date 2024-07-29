@@ -14,9 +14,10 @@ document.querySelector('#upload-cancel').addEventListener('click', (evt) => {
   document.body.classList.remove('modal-open');
   document.querySelector('#upload-file').value = '';
 });
+
 document.body.addEventListener('keydown', (evt) => {
   evt.preventDefault();
-  if (evt.key === 'Escape' && ) {
+  if (evt.key === 'Escape') {
     document.querySelector('.img-upload__overlay').classList.add('hidden');
     document.body.classList.remove('modal-open');
     document.querySelector('#upload-file').value = '';
@@ -24,13 +25,12 @@ document.body.addEventListener('keydown', (evt) => {
 });
 
 
-
 function areValidSymbols(value) {
   return HASHTAG_SYMBOLS.test(value);
 }
 
 function isValidCount(tags) {
-  tags.length <= MAX_HASHTAG_COUNT;
+  return tags.length <= MAX_HASHTAG_COUNT;
 }
 
 function areUniqueTags(tags) {
@@ -43,7 +43,7 @@ function normalizeTags(tags) {
 }
 
 function validateHashTags(tags) {
-  areValidSymbols(tags) && isValidCount(tags) && validateHashTags(normalizeTags(tags));
+  return areValidSymbols(tags) && isValidCount(tags) && validateHashTags(normalizeTags(tags)) && areUniqueTags(tags);
 }
 const toValidateHashTags = validateHashTags();
 
@@ -55,11 +55,13 @@ const pristine = new Pristine(uploadForm, {
   errorTextClass: 'img-upload__field-wrapper--error'
 });
 
+pristine.addValidator(document.querySelector('.text__hashtags'),
+  toValidateHashTags,
+  HASHTAG_ERROR_TEXT);
+
 uploadForm.addEventListener('submit', (evt) => {
   evt.preventDefault();
   pristine.validate();
 });
 
-pristine.addValidator(document.querySelector('text__hashtags'),
-  toValidateHashTags,
-  HASHTAG_ERROR_TEXT);
+

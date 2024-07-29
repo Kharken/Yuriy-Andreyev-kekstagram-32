@@ -1,4 +1,5 @@
 import { photos } from './setup.js';
+import { container } from './thumbs.js';
 
 const bigPicture = document.querySelector('.big-picture');
 const bigPictureImg = document.querySelector('.big-picture__img img');
@@ -87,4 +88,15 @@ function renderComments(currentPicture){
 }
 socialCommentsLoader.addEventListener('click', renderComments);
 
-export { openBigPicture };
+
+const showCard = () => {
+  container.addEventListener('click', (evt) => {
+    const currentPhoto = evt.target.closest('.picture');
+
+    if (currentPhoto) {
+      openBigPicture(currentPhoto.dataset.pictureId);
+    }
+  });
+};
+
+export { showCard };
