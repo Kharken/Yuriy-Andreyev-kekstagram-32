@@ -1,33 +1,53 @@
-// Модуль генерации рабочих данных
-
 import { generateRandomInteger, uniqueID, getRandomIndex } from './utils.js';
 import { descriptions, messages, names, photosID, COUNT_OF_PHOTOS, COUNT_OF_LIKES_MIN, COUNT_OF_LIKES_MAX, COUNT_OF_COMMENTS_MIN, COUNT_OF_COMMENTS_MAX, COUNT_OF_AVATARS } from './data.js';
 
-// Генерация комментариев
+function Comment(id, avatar, message, name) {
+  this.id = id;
+  this.avatar = avatar;
+  this.message = message;
+  this.name = name;
+}
 
-const createComments = () => ({
-  id: uniqueID(),
-  avatar: `img/avatar-${generateRandomInteger(1, COUNT_OF_AVATARS)}.svg`,
-  message: messages[getRandomIndex(messages)],
-  name: names[getRandomIndex(names)],
-});
+// const comment1 = new Comment(uniqueID(), photosID[0], messages[0], names[0]);
+// console.log('comment1', comment1);
 
-// Генерация фотографий
+function generateComments() {
+  const comments = [];
+  for (let i = COUNT_OF_COMMENTS_MIN; i < COUNT_OF_COMMENTS_MAX; i++) {
+    comments.push(new Comment(
+      uniqueID(),
+      `img/avatar-${generateRandomInteger(1, COUNT_OF_AVATARS)}.svg`,
+      messages[getRandomIndex(messages)],
+      names[getRandomIndex(names)]),
+    );
+  }
+  return comments;
+}
 
-const createPhotos = (index) => ({
-  id: photosID[index],
-  url: `photos/${photosID[index]}.jpg`,
-  description: descriptions[index],
-  likes: generateRandomInteger(COUNT_OF_LIKES_MIN, COUNT_OF_LIKES_MAX),
-  comments: Array.from(
-    { length: generateRandomInteger(COUNT_OF_COMMENTS_MIN, COUNT_OF_COMMENTS_MAX) },
-    createComments)
-});
 
-const getPhotos = () => Array.from(
-  { length: COUNT_OF_PHOTOS },
-  (_, index) => createPhotos(index));
+function Card(id, url, description, likes, comments) {
+  this.id = id;
+  this.url = url;
+  this.description = description;
+  this.likes = likes;
+  this.comments = comments;
+}
 
-const photos = getPhotos();
+function generateCards() {
+  const cards = [];
+  for (let i = 0; i < COUNT_OF_PHOTOS; i++) {
+    cards.push(new Card(
+      photosID[i],
+      `photos/${photosID[i]}.jpg`,
+      descriptions[i],
+      generateRandomInteger(COUNT_OF_LIKES_MIN, COUNT_OF_LIKES_MAX),
+      generateComments()
+    ));
 
-export { photos };
+
+  }
+  return cards;
+}
+const photos = generateCards();
+
+export {photos};
